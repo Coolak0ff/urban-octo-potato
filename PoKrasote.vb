@@ -235,7 +235,7 @@ Sub Сделать_по_красоте()
     Application.ScreenUpdating = True
     
     End Sub
-    Sub test_massage()
+    Sub test_massage() ' костыль, зато рабочий
         Sheets("Sheet1").Select
         PosStr = WorksheetFunction.CountA(Range("A:A"))
         d1 = "ДЭУ-1"
@@ -279,6 +279,11 @@ Sub Сделать_по_красоте()
         With Range("a" & PosStr + 7 & "").Select
             Selection.FormulaR1C1 = "Тестовое сообщение"
             Selection.offset(, 6).FormulaR1C1 = zl
+            Selection.offset(, 35).FormulaR1C1 = "999"
+        End With
+        With Range("a" & PosStr + 8 & "").Select
+            Selection.FormulaR1C1 = "Тестовое сообщение"
+            Selection.offset(, 6).FormulaR1C1 = "=INDEX(ДЭУ[#Data],MATCH(C6,ДЭУ[Название],0),MATCH(""ДЭУ"",ДЭУ[#Headers],0))"
             Selection.offset(, 35).FormulaR1C1 = "999"
         End With
     End Sub

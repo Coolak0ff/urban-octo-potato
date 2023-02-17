@@ -4,7 +4,7 @@ Sub Табличка_просрочек()
     Sheets("sheet1").Select
     PosStr = WorksheetFunction.CountA(Range("A:A"))
     Call DeuTable(PosStr)
-
+    Call is_exist
     Range("D12:K12").Select
     Range("C12:K12").NumberFormat = "dddd"
     
@@ -22,7 +22,7 @@ Sub Табличка_просрочек()
         ActiveCell.FormulaR1C1 = "=NOW()+ " & i & " "
     End If
         Call prazdn(i)
-        Call a(i, o)
+        Call days(i, o, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, Zel_exist, na_exist)
         o = o + 1
         i = i + 1
         ActiveCell.offset(, 1).Select
@@ -179,39 +179,51 @@ Sub p()
     Range("C13:C20").Select
     For Each elements In Selection
     If d = 1 Then
-    d1 = """ДЭУ-1"""
-    d2 = """ДЭУ-2"""
+        d1 = """ДЭУ-1"""
+        d2 = """ДЭУ-2"""
+        Call pp(d1, d2)
     End If
     If d = 2 Then
-    d1 = """ДЭУ-2"""
-    d2 = """ДЭУ-3"""
+        d1 = """ДЭУ-2"""
+        d2 = """ДЭУ-3"""
+        Call pp(d1, d2)
     End If
     If d = 3 Then
-    d1 = """ДЭУ-3"""
-    d2 = """ДЭУ-4"""
+        d1 = """ДЭУ-3"""
+        d2 = """ДЭУ-4"""
+        Call pp(d1, d2)
     End If
     If d = 4 Then
-    d1 = """ДЭУ-4"""
-    d2 = """ДЭУ-5"""
+        d1 = """ДЭУ-4"""
+        d2 = """ДЭУ-5"""
+        Call pp(d1, d2)
     End If
     If d = 5 Then
-    d1 = """ДЭУ-5"""
-    d2 = """Зелёнка"""
+        d1 = """ДЭУ-5"""
+        d2 = """Зелёнка"""
+        Call pp(d1, d2)
+        If DEU5_exist = False Then ActiveCell.Value = "0"
     End If
     If d = 6 Then
-    d1 = """ДРУ"""
-    d2 = """ДЭУ-1"""
+        d1 = """ДРУ"""
+        d2 = """ДЭУ-1"""
+        If na_exist = False Then d2 = """ДЭУ-2"""
+        Call pp(d1, d2)
     End If
     If d = 7 Then
-    d1 = """Зелёнка"""
-    d2 = """#Н/Д"""
+        d1 = """Зелёнка"""
+        d2 = """#Н/Д"""
+        If na_exist = False Then d2 = """Общий итог"""
+        Call pp(d1, d2)
+        If Zel_exist = False Then ActiveCell.Value = "0"
     End If
     If d = 8 Then
-    d1 = """#Н/Д"""
-    d2 = """Общий итог"""
+        d1 = """#Н/Д"""
+        d2 = """Общий итог"""
+        Call pp(d1, d2)
+        If na_exist = False Then ActiveCell.Value = "0"
     End If
     d = d + 1
-    Call pp(d1, d2)
     ActiveCell.offset(1).Select
     Next
     
@@ -321,46 +333,75 @@ ActiveCell.FormulaR1C1 = _
         "=COUNT(INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-2))"
 
 End Sub
+Sub is_exist()
 
-Sub a(i, o)
+Dim DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, Zel_exist, na_exist As Boolean
 
+For Each element In Range("M2:M394") 'заменить на последний номер страки
+    With element
+        If .Value = "ДЭУ-1" Then DEU1_exist = True
+        If .Value = "ДЭУ-2" Then DEU2_exist = True
+        If .Value = "ДЭУ-3" Then DEU3_exist = True
+        If .Value = "ДЭУ-4" Then DEU4_exist = True
+        If .Value = "ДЭУ-5" Then DEU5_exist = True
+        If .Value = "ДРУ" Then DRU_exist = True
+        If .Value = "Зелёнка" Then Zel_exist = True
+        If .Value = "#Н/Д" Then na_exist = True
+    End With
+Next
+MsgBox DEU1_exist
+End Sub
+Sub days(i, o, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, Zel_exist, na_exist)
     
     Range(Cells(13, 4 + o), Cells(20, 4 + o)).Select
     d = 1
     For Each element In Selection
+    
     If d = 1 Then
     d1 = """ДЭУ-1"""
     d2 = """ДЭУ-2"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 2 Then
     d1 = """ДЭУ-2"""
     d2 = """ДЭУ-3"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 3 Then
     d1 = """ДЭУ-3"""
     d2 = """ДЭУ-4"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 4 Then
     d1 = """ДЭУ-4"""
     d2 = """ДЭУ-5"""
+    If DEU5_exist = False Then d2 = """Зелёнка"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 5 Then
     d1 = """ДЭУ-5"""
     d2 = """Зелёнка"""
+    Call days_formula(i, d1, d2)
+    If DEU5_exist = False Then element.Value = "0"
     End If
     If d = 6 Then
     d1 = """ДРУ"""
     d2 = """ДЭУ-1"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 7 Then
-    d1 = """Зелёнка"""
-    d2 = """#Н/Д"""
+        d1 = """Зелёнка"""
+        d2 = """#Н/Д"""
+        If na_exist = False Then d2 = """Общий итог"""
+    Call days_formula(i, d1, d2)
     End If
     If d = 8 Then
-    d1 = """#Н/Д"""
-    d2 = """Общий итог"""
+        d1 = """#Н/Д"""
+        d2 = """Общий итог"""
+        Call days_formula(i, d1, d2)
+        If na_exist = False Then element.Value = "0"
     End If
-    Call c(i, d1, d2)
+    'Call days_formula(i, d1, d2)
     ActiveCell.offset(1).Select
     d = d + 1
     Next
@@ -368,7 +409,7 @@ Sub a(i, o)
     
 End Sub
 
-Sub c(i, d1, d2)
+Sub days_formula(i, d1, d2)
 
     ActiveCell.FormulaR1C1 = _
             "=COUNTIFS(INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),"">" & i & """,INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),""<" & i + 1 & """)"
@@ -481,4 +522,6 @@ Next
 Application.ScreenUpdating = True
 
 End Sub
+
+
 
