@@ -180,23 +180,27 @@ Sub p()
     For Each elements In Selection
     If d = 1 Then
         d1 = """ДЭУ-1"""
-        d2 = """ДЭУ-2"""
+        d2 = """ДЭУ-2""" 
         Call pp(d1, d2)
+        if DEU1_exist = false then Activatecell.Value = "0"
     End If
     If d = 2 Then
         d1 = """ДЭУ-2"""
         d2 = """ДЭУ-3"""
         Call pp(d1, d2)
+        if DEU2_exist = false then Activatecell.Value = "0"
     End If
     If d = 3 Then
         d1 = """ДЭУ-3"""
         d2 = """ДЭУ-4"""
         Call pp(d1, d2)
+        if DEU3_exist = false then Activatecell.Value = "0"
     End If
     If d = 4 Then
         d1 = """ДЭУ-4"""
         d2 = """ДЭУ-5"""
         Call pp(d1, d2)
+        if DEU4_exist = false then Activatecell.Value = "0"
     End If
     If d = 5 Then
         d1 = """ДЭУ-5"""
@@ -209,6 +213,7 @@ Sub p()
         d2 = """ДЭУ-1"""
         If na_exist = False Then d2 = """ДЭУ-2"""
         Call pp(d1, d2)
+        if DRU_exist = false then Activatecell.Value = "0"
     End If
     If d = 7 Then
         d1 = """Зелёнка"""
