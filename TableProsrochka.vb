@@ -363,42 +363,48 @@ Sub days(i, o, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, Zel_e
     For Each element In Selection
     
     If d = 1 Then
-    d1 = """ДЭУ-1"""
-    d2 = """ДЭУ-2"""
-    Call days_formula(i, d1, d2)
+        d1 = """ДЭУ-1"""
+        d2 = """ДЭУ-2"""
+        Call days_formula(i, d1, d2)
+        If DEU1_exist = False Then element.Value = "0"
     End If
     If d = 2 Then
-    d1 = """ДЭУ-2"""
-    d2 = """ДЭУ-3"""
-    Call days_formula(i, d1, d2)
+        d1 = """ДЭУ-2"""
+        d2 = """ДЭУ-3"""
+        Call days_formula(i, d1, d2)
+        If DEU2_exist = False Then element.Value = "0"
     End If
     If d = 3 Then
-    d1 = """ДЭУ-3"""
-    d2 = """ДЭУ-4"""
-    Call days_formula(i, d1, d2)
+        d1 = """ДЭУ-3"""
+        d2 = """ДЭУ-4"""
+        Call days_formula(i, d1, d2)
+        If DEU3_exist = False Then element.Value = "0"
     End If
     If d = 4 Then
-    d1 = """ДЭУ-4"""
-    d2 = """ДЭУ-5"""
-    If DEU5_exist = False Then d2 = """Зелёнка"""
-    Call days_formula(i, d1, d2)
+        d1 = """ДЭУ-4"""
+        d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        Call days_formula(i, d1, d2)
+        If DEU4_exist = False Then element.Value = "0"
     End If
     If d = 5 Then
-    d1 = """ДЭУ-5"""
-    d2 = """Зелёнка"""
-    Call days_formula(i, d1, d2)
-    If DEU5_exist = False Then element.Value = "0"
+        d1 = """ДЭУ-5"""
+        d2 = """Зелёнка"""
+        Call days_formula(i, d1, d2)
+        If DEU5_exist = False Then element.Value = "0"
     End If
     If d = 6 Then
-    d1 = """ДРУ"""
-    d2 = """ДЭУ-1"""
-    Call days_formula(i, d1, d2)
+        d1 = """ДРУ"""
+        d2 = """ДЭУ-1"""
+        Call days_formula(i, d1, d2)
+        If DRU_exist = False Then element.Value = "0"
     End If
     If d = 7 Then
         d1 = """Зелёнка"""
         d2 = """#Н/Д"""
         If na_exist = False Then d2 = """Общий итог"""
-    Call days_formula(i, d1, d2)
+        Call days_formula(i, d1, d2)
+        If Zel_exist = False Then element.Value = "0"
     End If
     If d = 8 Then
         d1 = """#Н/Д"""
