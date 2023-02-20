@@ -74,65 +74,28 @@ Sub prazdn(i)
     ActiveCell.NumberFormat = "dddd"
   
 End Sub
+
 Sub format()
 
     Range("C12:l12").NumberFormat = "dddd dd/mm"
+    
     Range("A11:l21").Select
-    Selection.ColumnWidth = 17
-    Selection.RowHeight = 25
+    
     With Selection
+        .Borders.LineStyle = xlContinuous
+        .ColumnWidth = 17
+        .RowHeight = 25
         .HorizontalAlignment = xlCenter
         .VerticalAlignment = xlCenter
     End With
-    
-    Range("A11:A21").Select
+
+    Range("A11:l12,A11:A21").Select
     With Selection.Interior
         .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = -0.249977111117893
-        .PatternTintAndShade = 0
-    End With
-    Range("A11:l11").Select
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = -0.249977111117893
-        .PatternTintAndShade = 0
-    End With
-    Range("B12:l12").Select
-    With Selection.Interior
-        .Pattern = xlSolid
-        .PatternColorIndex = xlAutomatic
-        .ThemeColor = xlThemeColorDark1
-        .TintAndShade = -0.249977111117893
-        .PatternTintAndShade = 0
-    End With
-    Range("A11:l21").Select
-    Range("l12").Activate
-    Selection.Borders(xlDiagonalDown).LineStyle = xlNone
-    Selection.Borders(xlDiagonalUp).LineStyle = xlNone
-    With Selection.Borders(xlEdgeLeft)
-        .LineStyle = xlContinuous
-    End With
-    With Selection.Borders(xlEdgeTop)
-        .LineStyle = xlContinuous
-    End With
-    With Selection.Borders(xlEdgeBottom)
-        .LineStyle = xlContinuous
-    End With
-    With Selection.Borders(xlEdgeRight)
-        .LineStyle = xlContinuous
-    End With
-    With Selection.Borders(xlInsideVertical)
-        .LineStyle = xlContinuous
-    End With
-    With Selection.Borders(xlInsideHorizontal)
-        .LineStyle = xlContinuous
+        .TintAndShade = -0.25
     End With
     
-    With Range("d13:g21").Interior
+    With Range("D13:G21,L13:L21").Interior
         .Color = 4210943
     End With
     
@@ -140,28 +103,16 @@ Sub format()
         .Color = 2039807
     End With
     
-    With Range("L13:L21").Interior
-        .Color = 4210943
-    End With
-    
-    For Each element In Range("c13:g21")
+    For Each element In Range("c13:g21,l13:l21")
         If element.Value > 0 Then
         element.Font.Bold = True
         End If
     Next
     
-    For Each element In Range("l13:l21")
-        If element.Value > 0 Then
-        element.Font.Bold = True
-        End If
-    Next
-    
-    Range("B11:B12").Merge
-    Range("a11:a12").Merge
-    Range("c11:c12").Merge
-    Range("l11:l12").Merge
+    Range("a11:a12,B11:B12,c11:c12,l11:l12").Merge
 
 End Sub
+
 Sub Pros(PosStr)
 
     Range("AJ:AJ").Select
