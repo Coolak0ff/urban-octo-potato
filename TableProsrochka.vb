@@ -222,7 +222,7 @@ Sub sum()
     Call in_work
         
     For Each element In Range("b21:L21")
-        element.FormulaR1C1 = "=SUM(R[-1]C:R[-7]C)"
+        element.FormulaR1C1 = "=SUM(R[-1]C:R[-8]C)"
     Next
         
     Range("L12").FormulaR1C1 = "Итого срочных"
