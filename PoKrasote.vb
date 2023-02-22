@@ -1,7 +1,7 @@
 Sub Сделать_по_красоте()
 Application.ScreenUpdating = False
 Call ДЭУ
-Call Добавить_ДЭУ
+Call Add_DEU
 Call Pros(PosStr)
 Call DRU
 Call zelyonka
@@ -9,12 +9,15 @@ Call Сделать_табличку
 
 Sheets("Таблица").Select
 End Sub
-Sub Добавить_ДЭУ()
-
+Sub Add_DEU()
     Sheets("Sheet1").Select
     PosStr = WorksheetFunction.CountA(Range("A:A"))
-    Range("G:G").Insert Shift:=xlToRight
-    Range("G1").Select
+    For Each element In Range("1:1")
+        If element.Text = "Объект" Then
+        element.offset(, 1).Select
+        End If
+    Next
+    Selection.Insert Shift:=xlToRight
     With Selection
         .FormulaR1C1 = "ДЭУ"
         .Range("A2:A" & PosStr & "").FormulaR1C1 = "=INDEX(ДЭУ[#Data],MATCH(C6,ДЭУ[Название],0),MATCH(""ДЭУ"",ДЭУ[#Headers],0))"
