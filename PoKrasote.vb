@@ -1,7 +1,7 @@
 Sub Сделать_по_красоте()
 Application.ScreenUpdating = False
 Call ДЭУ
-Call Add_DEU
+Call Добавить_ДЭУ
 Call Pros(PosStr)
 Call DRU
 Call zelyonka
@@ -9,7 +9,8 @@ Call Сделать_табличку
 
 Sheets("Таблица").Select
 End Sub
-Sub Add_DEU()
+Sub Добавить_ДЭУ()
+
     Sheets("Sheet1").Select
     PosStr = WorksheetFunction.CountA(Range("A:A"))
     For Each element In Range("1:1")
@@ -28,9 +29,9 @@ Sub Pros(PosStr)
 
     PosStr = WorksheetFunction.CountA(Range("A:A"))
 
-    Range("AJ:AJ").Insert Shift:=xlToRight
-    Range("AJ1").FormulaR1C1 = "Просрочка (срок - текущая дата)"
-    Range("AJ2:AJ" & PosStr & "").Select
+    Range("Ai:Ai").Insert Shift:=xlToRight
+    Range("Ai1").FormulaR1C1 = "Просрочка (срок - текущая дата)"
+    Range("Ai2:Ai" & PosStr & "").Select
     With Selection
         .FormulaR1C1 = "=ROUNDdown(RC[-1]-NOW(),1)"
         .FillDown
@@ -39,7 +40,7 @@ Sub Pros(PosStr)
     
     Columns("AK:AK").Insert Shift:=xlToRight
     Range("ak1").FormulaR1C1 = "Просрочено"
-    For Each element In Range("ak2:ak" & PosStr & "")
+    For Each element In Range("aj2:aj" & PosStr & "")
         If element.offset(, -1) < 0 Then
         element.FormulaR1C1 = "Просрочено"
         End If
