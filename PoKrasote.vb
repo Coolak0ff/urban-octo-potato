@@ -231,14 +231,16 @@ start_pos = 720
     
     Range("a1").Select
     
-    With ActiveSheet.CheckBoxes.Add(start_pos + 80 * 1, 100, 72, 20).Select
+    checkbox_width = 144
+
+    With ActiveSheet.CheckBoxes.Add(start_pos + 80 * 1, 100, checkbox_width, 20).Select
         With Selection
             .Name = "checkbox1"
             .Caption = "С просрочкой"
             .OnAction = "PERSONAL.XLSB!All"
             .Placement = xlFreeFloating
         End With
-    With ActiveSheet.CheckBoxes.Add(start_pos + 80 * 1, 125, 72, 20).Select
+    With ActiveSheet.CheckBoxes.Add(start_pos + 80 * 1, 125, checkbox_width, 20).Select
         With Selection
             .Name = "checkbox2"
             .Caption = "С контролем"
