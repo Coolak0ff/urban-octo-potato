@@ -66,6 +66,13 @@ Sub holiday(i) 'yep thats shit is hardcoded
         ActiveCell.FormulaR1C1 = "=NOW()+ " & i & " "
     End If
     ActiveCell.NumberFormat = "dddd"
+    
+    ActiveCell.NumberFormat = "dd/mm"
+    If ActiveCell.Text = "08.03" Then
+        i = i + 1
+        ActiveCell.FormulaR1C1 = "=NOW()+ " & i & " "
+    End If
+    ActiveCell.NumberFormat = "dddd"
   
 End Sub
 Sub format()
