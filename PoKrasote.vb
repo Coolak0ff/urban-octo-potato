@@ -1,11 +1,12 @@
 Sub Сделать_по_красоте()
-Application.ScreenUpdating = False
+Application.ScreenUpdating = True
 Call ДЭУ
 Call Добавить_ДЭУ
 Call Pros(PosStr)
 Call DRU
 Call zelyonka
-Call Сделать_табличку
+Call is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
+Call Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 
 Sheets("Таблица").Select
 End Sub
@@ -25,22 +26,55 @@ Sub Добавить_ДЭУ()
     End With
     
 End Sub
+Sub DEU_column()
+
+    For Each element In Range("1:1")
+        If element.Text = "ДЭУ" Then
+        element.Select
+        End If
+    Next
+
+End Sub
+Sub is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
+
+PosStr = WorksheetFunction.CountA(Range("A:A"))
+
+Call DEU_column
+    
+    For Each element In Range(Selection.offset(1), Selection.offset(PosStr - 1))
+        If element.Text = "ДРУ" Then DRU_is_exist = True
+        If element.Text = "ДЭУ-1" Then DEU1_is_exist = True
+        If element.Text = "ДЭУ-2" Then DEU2_is_exist = True
+        If element.Text = "ДЭУ-3" Then DEU3_is_exist = True
+        If element.Text = "ДЭУ-4" Then DEU4_is_exist = True
+        If element.Text = "ДЭУ-5" Then DEU5_is_exist = True
+        If element.Text = "Зелёнка" Then ZL_is_exist = True
+        If element.Text = "#Н/Д" Then NA_is_exist = True
+    Next
+    
+        
+End Sub
 Sub Pros(PosStr)
 
     PosStr = WorksheetFunction.CountA(Range("A:A"))
-
-    Range("Ai:Ai").Insert Shift:=xlToRight
-    Range("Ai1").FormulaR1C1 = "Просрочка (срок - текущая дата)"
-    Range("Ai2:Ai" & PosStr & "").Select
-    With Selection
+    
+    For Each element In Range("1:1")
+        If element.Text = "Регламентный срок подготовки ответа" Then
+        element.Select
+        End If
+    Next
+    Selection.Insert Shift:=xlToRight
+    Selection.FormulaR1C1 = "Просрочка (срок - текущая дата)"
+    With Range(Selection.offset(1), Selection.offset(PosStr - 1))
         .FormulaR1C1 = "=ROUNDdown(RC[-1]-NOW(),1)"
         .FillDown
         .NumberFormat = "General"
     End With
     
-    Columns("AK:AK").Insert Shift:=xlToRight
-    Range("ak1").FormulaR1C1 = "Просрочено"
-    For Each element In Range("aj2:aj" & PosStr & "")
+    Selection.offset(, 1).Select
+    Range(Selection.offset(1), Selection.offset(PosStr - 1)).Insert Shift:=xlToRight
+    Selection.FormulaR1C1 = "Просрочено"
+    For Each element In Range(Selection.offset(1), Selection.offset(PosStr - 1))
         If element.offset(, -1) < 0 Then
         element.FormulaR1C1 = "Просрочено"
         End If
@@ -48,7 +82,7 @@ Sub Pros(PosStr)
     
 End Sub
 
-Sub Сделать_табличку()
+Sub Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 
 PosStr = WorksheetFunction.CountA(Range("A:A"))
 excel_version = 6
@@ -118,15 +152,41 @@ excel_version = 6
         With .PivotFields("ДЭУ")
             .Orientation = xlRowField
             .Position = 1
+            
+            If DRU_is_exist = True Then
             .PivotItems("ДРУ").ShowDetail = False
+            End If
+            
+            If DEU1_is_exist Then
             .PivotItems("ДЭУ-1").ShowDetail = False
+            End If
+            
+            If DEU2_is_exist Then
             .PivotItems("ДЭУ-2").ShowDetail = False
+            End If
+            
+            If DEU3_is_exist Then
             .PivotItems("ДЭУ-3").ShowDetail = False
+            End If
+            
+            If DEU4_is_exist Then
             .PivotItems("ДЭУ-4").ShowDetail = False
+            End If
+            
+            If DEU5_is_exist Then
             .PivotItems("ДЭУ-5").ShowDetail = False
+            End If
+            
+            If ZL_is_exist Then
             .PivotItems("Зелёнка").ShowDetail = False
-            '.PivotItems("#N/A").ShowDetail = False
-            End With
+            End If
+            
+            If NA_is_exist Then
+            .PivotItems("#N/A").ShowDetail = False
+            End If
+        
+        End With
+            
     End With
          
     Call Buttons
