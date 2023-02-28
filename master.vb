@@ -1,7 +1,4 @@
-Sub Ìàêðîñ8()
-'
-' Ìàêðîñ8 Ìàêðîñ
-'
+Sub MasterSheet()
 
 '
     Sheets.Add.Name = "MasterSheet"
