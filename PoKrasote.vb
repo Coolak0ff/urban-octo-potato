@@ -1,5 +1,5 @@
 Sub Сделать_по_красоте()
-Application.ScreenUpdating = True
+Application.ScreenUpdating = False
 Call ДЭУ
 Call Добавить_ДЭУ
 Call Pros(PosStr)
@@ -7,6 +7,7 @@ Call DRU
 Call zelyonka
 Call is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 Call Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
+Call mastersheet
 
 Sheets("Таблица").Select
 End Sub
@@ -14,16 +15,28 @@ Sub Добавить_ДЭУ()
 
     Sheets("Sheet1").Select
     PosStr = WorksheetFunction.CountA(Range("A:A"))
+    
     For Each element In Range("1:1")
+        object_column = object_column + 1
         If element.Text = "Объект" Then
-        element.offset(, 1).Select
+        Exit For
         End If
     Next
-    Selection.Insert Shift:=xlToRight
+    
+    Columns(object_column + 1).Insert Shift:=xlToRight
+    Columns(object_column + 1).Select
     With Selection
-        .FormulaR1C1 = "ДЭУ"
+        .Range("a1").FormulaR1C1 = "ДЭУ"
         .Range("A2:A" & PosStr & "").FormulaR1C1 = "=INDEX(ДЭУ[#Data],MATCH(C6,ДЭУ[Название],0),MATCH(""ДЭУ"",ДЭУ[#Headers],0))"
     End With
+    
+    Response = MsgBox("Ввести ДЭУ к которому относится этот объект", vbYesNo)
+    If Response = vbNo Then Exit Sub
+    For Each element In Selection
+        If element.Text = "#Н/Д" Then
+        element.Value = "ДЭУ-" & InputBox("К какому ДЭУ относиться " & element.offset(, -1).Text & "" & vbCrLf & "" & vbCrLf & "Проблемная тема: " & element.offset(, -2).Text & "" & vbCrLf & "" & vbCrLf & "Указывать только номер ДЭУ")
+        End If
+    Next
     
 End Sub
 Sub DEU_column()
@@ -58,13 +71,17 @@ Sub Pros(PosStr)
 
     PosStr = WorksheetFunction.CountA(Range("A:A"))
     
-    For Each element In Range("1:1")
+    For Each element In Range("1:1") '
+        data_column = data_column + 1
         If element.Text = "Регламентный срок подготовки ответа" Then
-        element.Select
+        Exit For
         End If
     Next
-    Selection.Insert Shift:=xlToRight
-    Selection.FormulaR1C1 = "Просрочка (срок - текущая дата)"
+    
+    Columns(data_column + 1).Insert Shift:=xlToRight
+    Cells(1, data_column + 1).FormulaR1C1 = "Просрочка (срок - текущая дата)"
+    Cells(1, data_column + 1).Select
+    
     With Range(Selection.offset(1), Selection.offset(PosStr - 1))
         .FormulaR1C1 = "=ROUNDdown(RC[-1]-NOW(),1)"
         .FillDown
@@ -230,9 +247,8 @@ start_pos = 720
     End With
     
     Range("a1").Select
-    
     checkbox_width = 144
-
+    
     With ActiveSheet.CheckBoxes.Add(start_pos + 80 * 1, 100, checkbox_width, 20).Select
         With Selection
             .Name = "checkbox1"
