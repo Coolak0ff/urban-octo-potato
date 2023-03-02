@@ -25,7 +25,7 @@ Sub Табличка_просрочек_2()
         Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,MasterSheet!R2C2:R118C2)-NOW(),0)+1"
         
         Range("k12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),7,MasterSheet!R2C2:R118C2)-NOW(),0)+1"
-        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),9,MasterSheet!R2C2:R118C2)-NOW(),0)+2"
+        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),10,MasterSheet!R2C2:R118C2)-NOW(),0)+2"
         
         Range("d8:k9").NumberFormat = "General"
         
@@ -33,21 +33,21 @@ Sub Табличка_просрочек_2()
         o = o + 1
         element.offset(, 1).Select
     Next
-    Call chtoto
+    Call chtoto(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     'Call first_day(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist, d)
     Range("C12:J12").NumberFormat = "dddd dd/mm"
     Call format
     Call white_if_sum_of_critical_is_0
     
 End Sub
-Sub chtoto()
+Sub chtoto(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
 
 'Range("d13").Select
 For Column = 0 To 7
 For Each element In Range("d13:d20").offset(, Column)
     i1 = Range("d8").offset(, Column).Text
     i2 = Range("d9").offset(, Column).Text
-    Call chtoto_formula(element, i1, i2, d)
+    Call chtoto_formula(element, i1, i2, d, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     d = d + 1
     element.offset(1).Select
 Next
@@ -56,34 +56,58 @@ Next
 
 End Sub
 
-Sub chtoto_formula(element, i1, i2, d)
+Sub chtoto_formula(element, i1, i2, d, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
+
     If d = 0 Then
         d1 = """ДЭУ-1"""
         d2 = """ДЭУ-2"""
+        If DEU2_exist = False Then d2 = """ДЭУ-3"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 1 Then
         d1 = """ДЭУ-2"""
         d2 = """ДЭУ-3"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 2 Then
         d1 = """ДЭУ-3"""
         d2 = """ДЭУ-4"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 3 Then
         d1 = """ДЭУ-4"""
         d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 4 Then
         d1 = """ДЭУ-5"""
         d2 = """Зелёнка"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 5 Then
         d1 = """ДРУ"""
         d2 = """ДЭУ-1"""
+        If DEU1_exist = False Then d2 = """ДЭУ-2"""
+        If DEU2_exist = False Then d2 = """ДЭУ-3"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 6 Then
         d1 = """Зелёнка"""
         d2 = """#Н/Д"""
+        If na_exist = False Then d2 = """Общий итог"""
     End If
     If d = 7 Then
         d1 = """#Н/Д"""
@@ -92,6 +116,8 @@ Sub chtoto_formula(element, i1, i2, d)
     
     element.FormulaR1C1 = _
     "=COUNTIFS(INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),"">" & i1 & """,INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),""<" & i2 & """)"
+    
+    If element.Value = "#N/A" Then element.Value = "0"
 
 End Sub
 
@@ -204,6 +230,10 @@ Sub format()
     Next
     
     Range("a11:a12,B11:B12,c11:c12,l11:l12").Merge
+    
+    For Each element In Range("b13:b20")
+        If element.Value = 0 Then element.EntireRow.Hidden = True
+    Next
 
 End Sub
 Sub white_if_sum_of_critical_is_0()
