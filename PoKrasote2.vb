@@ -3,14 +3,21 @@ Application.ScreenUpdating = False
 Call ДЭУ
 Call Добавить_ДЭУ
 Call Pros(PosStr)
-Call DRU
-Call zelyonka
 Call is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 Call Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 Call mastersheet
 
 
 Sheets("Таблица").Select
+End Sub
+Sub DEU_column()
+
+    For Each element In Range("1:1")
+        If element.Text = "ДЭУ" Then
+        element.Select
+        End If
+    Next
+
 End Sub
 Sub Добавить_ДЭУ()
 
@@ -31,9 +38,13 @@ Sub Добавить_ДЭУ()
         .Range("A2:A" & PosStr & "").FormulaR1C1 = "=INDEX(ДЭУ[#Data],MATCH(C6,ДЭУ[Название],0),MATCH(""ДЭУ"",ДЭУ[#Headers],0))"
     End With
     
+Call zelyonka
+Call DRU
+
+    Columns(object_column + 1).Select
+    Range("g2:g" & PosStr & "").Select
     Response = MsgBox("Ввести ДЭУ к которому относится этот объект", vbYesNo)
     If Response = vbNo Then Exit Sub
-    Application.ScreenUpdating = True
     For Each element In Selection
         If element.Text = "#Н/Д" Then
         element.Select
@@ -41,17 +52,9 @@ Sub Добавить_ДЭУ()
         'element.Value = "ДЭУ-" & InputBox("К какому ДЭУ относиться " & element.offset(, -1).Text & "" & vbCrLf & "" & vbCrLf & "Проблемная тема: " & element.offset(, -2).Text & "" & vbCrLf & "" & vbCrLf & "Указывать только номер ДЭУ")
         End If
     Next
-    Application.ScreenUpdating = False
+    
 End Sub
-Sub DEU_column()
 
-    For Each element In Range("1:1")
-        If element.Text = "ДЭУ" Then
-        element.Select
-        End If
-    Next
-
-End Sub
 Sub is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 
 PosStr = WorksheetFunction.CountA(Range("A:A"))
