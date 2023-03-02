@@ -8,7 +8,7 @@ Sub Табличка_просрочек_2()
     Call DeuTable(PosStr)
     Call is_exist(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     Call column_with_name
-    Call sum
+    Call sum(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     Call p(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     
     o = 0
@@ -61,53 +61,65 @@ Sub chtoto_formula(element, i1, i2, d, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_
     If d = 0 Then
         d1 = """ДЭУ-1"""
         d2 = """ДЭУ-2"""
-        If DEU2_exist = False Then d2 = """ДЭУ-3"""
-        If DEU3_exist = False Then d2 = """ДЭУ-4"""
-        If DEU4_exist = False Then d2 = """ДЭУ-5"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU2_exist = False Then d2 = """ДЭУ-3"""
+        If DEU2_exist = True Then d2 = """ДЭУ-2"""
     End If
     If d = 1 Then
         d1 = """ДЭУ-2"""
         d2 = """ДЭУ-3"""
-        If DEU3_exist = False Then d2 = """ДЭУ-4"""
-        If DEU4_exist = False Then d2 = """ДЭУ-5"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU3_exist = True Then d2 = """ДЭУ-3"""
     End If
     If d = 2 Then
         d1 = """ДЭУ-3"""
         d2 = """ДЭУ-4"""
-        If DEU4_exist = False Then d2 = """ДЭУ-5"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU4_exist = True Then d2 = """ДЭУ-4"""
     End If
     If d = 3 Then
         d1 = """ДЭУ-4"""
         d2 = """ДЭУ-5"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If DEU5_exist = True Then d2 = """ДЭУ-5"""
     End If
     If d = 4 Then
         d1 = """ДЭУ-5"""
         d2 = """Зелёнка"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If Zel_exist = True Then d2 = """Зелёнка"""
     End If
     If d = 5 Then
         d1 = """ДРУ"""
         d2 = """ДЭУ-1"""
-        If DEU1_exist = False Then d2 = """ДЭУ-2"""
-        If DEU2_exist = False Then d2 = """ДЭУ-3"""
-        If DEU3_exist = False Then d2 = """ДЭУ-4"""
-        If DEU4_exist = False Then d2 = """ДЭУ-5"""
-        If DEU5_exist = False Then d2 = """Зелёнка"""
         If na_exist = False Then d2 = """Общий итог"""
+        If Zel_exist = False Then d2 = """#Н/Д"""
+        If DEU5_exist = False Then d2 = """Зелёнка"""
+        If DEU4_exist = False Then d2 = """ДЭУ-5"""
+        If DEU3_exist = False Then d2 = """ДЭУ-4"""
+        If DEU2_exist = False Then d2 = """ДЭУ-3"""
+        If DEU1_exist = False Then d2 = """ДЭУ-2"""
+        If DEU1_exist = True Then d2 = """ДЭУ-1"""
     End If
     If d = 6 Then
         d1 = """Зелёнка"""
         d2 = """#Н/Д"""
         If na_exist = False Then d2 = """Общий итог"""
+        If na_exist = True Then d2 = """#Н/Д"""
     End If
     If d = 7 Then
         d1 = """#Н/Д"""
@@ -231,9 +243,8 @@ Sub format()
     
     Range("a11:a12,B11:B12,c11:c12,l11:l12").Merge
     
-    For Each element In Range("b13:b20")
-        If element.Value = 0 Then element.EntireRow.Hidden = True
-    Next
+    If Range("b20").Text = 0 Then If Range("b20").EntireRow.Hidden = True
+
 
 End Sub
 Sub white_if_sum_of_critical_is_0()
@@ -348,10 +359,10 @@ Sub pp(d1, d2)
     ActiveCell.FormulaR1C1 = "=COUNTIF(INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),""<0"")"
 
 End Sub
-Sub sum()
+Sub sum(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     Range("b12").FormulaR1C1 = "Всего в работе"
 
-    Call in_work
+    Call in_work(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
         
     For Each element In Range("b21:L21")
         element.FormulaR1C1 = "=SUM(R[-1]C:R[-8]C)"
@@ -364,7 +375,7 @@ Sub sum()
     Next
     
 End Sub
-Sub in_work()
+Sub in_work(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
 
     Range("b13:b20").Select
     d = 1
@@ -372,30 +383,65 @@ Sub in_work()
         If d = 1 Then
             d1 = """ДЭУ-1"""
             d2 = """ДЭУ-2"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If DEU5_exist = False Then d2 = """Зелёнка"""
+            If DEU4_exist = False Then d2 = """ДЭУ-5"""
+            If DEU3_exist = False Then d2 = """ДЭУ-4"""
+            If DEU2_exist = False Then d2 = """ДЭУ-3"""
+            If DEU2_exist = True Then d2 = """ДЭУ-2"""
         End If
         If d = 2 Then
             d1 = """ДЭУ-2"""
             d2 = """ДЭУ-3"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If DEU5_exist = False Then d2 = """Зелёнка"""
+            If DEU4_exist = False Then d2 = """ДЭУ-5"""
+            If DEU3_exist = False Then d2 = """ДЭУ-4"""
+            If DEU3_exist = True Then d2 = """ДЭУ-3"""
         End If
         If d = 3 Then
             d1 = """ДЭУ-3"""
             d2 = """ДЭУ-4"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If DEU5_exist = False Then d2 = """Зелёнка"""
+            If DEU4_exist = False Then d2 = """ДЭУ-5"""
+            If DEU4_exist = True Then d2 = """ДЭУ-4"""
         End If
         If d = 4 Then
             d1 = """ДЭУ-4"""
             d2 = """ДЭУ-5"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If DEU5_exist = False Then d2 = """Зелёнка"""
+            If DEU5_exist = True Then d2 = """ДЭУ-5"""
         End If
         If d = 5 Then
             d1 = """ДЭУ-5"""
             d2 = """Зелёнка"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If Zel_exist = True Then d2 = """Зелёнка"""
         End If
         If d = 6 Then
             d1 = """ДРУ"""
             d2 = """ДЭУ-1"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If Zel_exist = False Then d2 = """#Н/Д"""
+            If DEU5_exist = False Then d2 = """Зелёнка"""
+            If DEU4_exist = False Then d2 = """ДЭУ-5"""
+            If DEU3_exist = False Then d2 = """ДЭУ-4"""
+            If DEU2_exist = False Then d2 = """ДЭУ-3"""
+            If DEU1_exist = False Then d2 = """ДЭУ-2"""
+            If DEU1_exist = True Then d2 = """ДЭУ-1"""
         End If
         If d = 7 Then
             d1 = """Зелёнка"""
             d2 = """#Н/Д"""
+            If na_exist = False Then d2 = """Общий итог"""
+            If na_exist = True Then d2 = """#Н/Д"""
         End If
         If d = 8 Then
             d1 = """#Н/Д"""
@@ -608,8 +654,5 @@ For x = 1 To NumRows
     End If
 ActiveCell.offset(1, 0).Select
 Next
-Application.ScreenUpdating = True
 
 End Sub
-
-
