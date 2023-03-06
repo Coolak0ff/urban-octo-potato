@@ -1,11 +1,14 @@
 Sub Сделать_по_красоте()
 Application.ScreenUpdating = False
-Call ДЭУ
+curent_workbook = ActiveWorkbook.Name
+Call open_personal
+Workbooks(curent_workbook).Activate
 Call Добавить_ДЭУ
 Call Pros(PosStr)
 Call is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 Call Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
-Call mastersheet
+Sheets("Таблица").Select
+End Sub
 
 
 Sheets("Таблица").Select
