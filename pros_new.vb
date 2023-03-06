@@ -17,15 +17,15 @@ Sub Табличка_просрочек_2()
 
     For Each element In Range("D12:K12")
     With element
-        .FormulaR1C1 = "=WORKDAY(NOW()," & o & ",MasterSheet!R2C2:R118C2)"
-        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",MasterSheet!R2C2:R118C2)-NOW(),0)+1"
-        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",MasterSheet!R2C2:R118C2)-NOW(),0)+2"
+        .FormulaR1C1 = "=WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)"
+        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
+        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+2"
     End With
-        Range("d12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,MasterSheet!R2C2:R118C2)-NOW(),0)"
-        Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,MasterSheet!R2C2:R118C2)-NOW(),0)+1"
+        Range("d12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)"
+        Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
         
-        Range("k12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),7,MasterSheet!R2C2:R118C2)-NOW(),0)+1"
-        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),10,MasterSheet!R2C2:R118C2)-NOW(),0)+2"
+        Range("k12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),7,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
+        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),10,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+2"
         
         Range("d8:k9").NumberFormat = "General"
         
