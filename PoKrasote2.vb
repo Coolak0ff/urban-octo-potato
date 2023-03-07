@@ -9,10 +9,6 @@ Call is_PivotItem_exist(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exis
 Call Сделать_табличку(DRU_is_exist, DEU1_is_exist, DEU2_is_exist, DEU3_is_exist, DEU4_is_exist, DEU5_is_exist, ZL_is_exist, NA_is_exist)
 Sheets("Таблица").Select
 End Sub
-
-
-Sheets("Таблица").Select
-End Sub
 Sub DEU_column()
 
     For Each element In Range("1:1")
@@ -38,7 +34,7 @@ Sub Добавить_ДЭУ()
     Columns(object_column + 1).Select
     With Selection
         .Range("a1").FormulaR1C1 = "ДЭУ"
-        .Range("A2:A" & PosStr & "").FormulaR1C1 = "=INDEX(ДЭУ[#Data],MATCH(C6,ДЭУ[Название],0),MATCH(""ДЭУ"",ДЭУ[#Headers],0))"
+        .Range("A2:A" & PosStr & "").FormulaR1C1 = "=INDEX([MasterBook.xlsm]MasterSheet!ДЭУ[#Data],MATCH(C6,[MasterBook.xlsm]MasterSheet!ДЭУ[Название],0),MATCH(""ДЭУ"",[MasterBook.xlsm]MasterSheet!ДЭУ[#Headers],0))"
     End With
     
 Call zelyonka
