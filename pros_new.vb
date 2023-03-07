@@ -129,7 +129,7 @@ Sub chtoto_formula(element, i1, i2, d, DEU1_exist, DEU2_exist, DEU3_exist, DEU4_
     element.FormulaR1C1 = _
     "=COUNTIFS(INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),"">" & i1 & """,INDEX(C14,MATCH(" & d1 & ",C13,0)+1):INDEX(C14,MATCH(" & d2 & ",C13,0)-1),""<" & i2 & """)"
     
-    If element.Value = "#N/A" Then element.Value = "0"
+    If element.Text = "#Н/Д" Then element.Value = "0"
 
 End Sub
 
