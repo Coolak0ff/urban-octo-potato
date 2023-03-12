@@ -42,8 +42,8 @@ Sub Табличка_просрочек_2()
     For Each element In Range("D12:K12")
     With element
         .FormulaR1C1 = "=WORKDAY(now()-" & offset & "," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)"
-        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & "," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+1"
-        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & "," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+2"
+        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now(),0)+1"
+        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now(),0)+2"
     End With
         Range("d12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)"
         Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+1"
