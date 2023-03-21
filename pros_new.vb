@@ -1,8 +1,31 @@
 
 Sub Табличка_просрочек_2()
+    curent_workbook = ActiveWorkbook.Name
+    Workbooks("MasterBook.xlsm").Activate
     
+    day8 = Left(now, 10)
+    offset = 0
+    
+    For Each element In Range("[MasterBook.xlsm]MasterSheet!d2:d119")
+        If day8 = element.Text Then
+            today_is_a_holiday_or_week_end = True
+            element.Select
+            Exit For
+        End If
+    Next
+    Do Until today_is_a_holiday_or_week_end = False
+        If day8 = Selection.Text Then
+            offset = offset + 1
+            day8 = Left(now - offset, 10)
+            Selection.offset(-1).Select
+        Else
+            today_is_a_holiday_or_week_end = False
+        End If
+    Loop
+    MsgBox day8
+
     Dim DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, Zel_exist, na_exist As Boolean
-    
+    Workbooks(curent_workbook).Activate
     Sheets("sheet1").Select
     PosStr = WorksheetFunction.CountA(Range("A:A"))
     Call DeuTable(PosStr)
@@ -11,21 +34,22 @@ Sub Табличка_просрочек_2()
     Call sum(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     Call p(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist)
     
+    
     o = 0
     
     Range("a1").Select
 
     For Each element In Range("D12:K12")
     With element
-        .FormulaR1C1 = "=WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)"
-        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
-        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+2"
+        .FormulaR1C1 = "=WORKDAY(now()-" & offset & "," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)"
+        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now(),0)+1"
+        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()," & o & ",[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now(),0)+2"
     End With
-        Range("d12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)"
-        Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
+        Range("d12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)"
+        Range("d12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",0,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+1"
         
-        Range("k12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),7,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+1"
-        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),10,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-NOW(),0)+2"
+        Range("k12").offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",7,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+1"
+        Range("k12").offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & ",10,[MasterBook.xlsm]MasterSheet!R2C4:R119C4)-now()-" & offset & ",0)+2"
         
         Range("d8:k9").NumberFormat = "General"
         
@@ -137,8 +161,8 @@ End Sub
 Sub first_day(DEU1_exist, DEU2_exist, DEU3_exist, DEU4_exist, DEU5_exist, DRU_exist, Zel_exist, na_exist, d)
     
     With Range("k12")
-        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),7,MasterSheet!R2C2:R118C2)-NOW(),0)+1"
-        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(NOW(),9,MasterSheet!R2C2:R118C2)-NOW(),0)+2"
+        .offset(-4).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & "(),7,MasterSheet!R2C2:R118C2)-now()-" & offset & "(),0)+1"
+        .offset(-3).FormulaR1C1 = "=ROUNDDOWN(WORKDAY(now()-" & offset & "(),9,MasterSheet!R2C2:R118C2)-now()-" & offset & "(),0)+2"
     End With
     
     Range("k8:k9").NumberFormat = "General"
@@ -224,15 +248,15 @@ Sub format()
 
     Range("A11:l12,A11:A21").Select
     With Selection.Interior
-        .Color = 12632256 'gray
+        .color = 12632256 'gray
     End With
     
     With Range("D13:G21,L13:L21").Interior
-        .Color = 4210943 'slightly red
+        .color = 4210943 'slightly red
     End With
     
     With Range("C13:C21").Interior
-        .Color = 2039807 'dark red
+        .color = 2039807 'dark red
     End With
     
     For Each element In Range("c13:g21,l13:l21")
@@ -243,7 +267,7 @@ Sub format()
     
     Range("a11:a12,B11:B12,c11:c12,l11:l12").Merge
     
-    If Range("b20").Text = 0 Then If Range("b20").EntireRow.Hidden = True
+    If Range("b20").Value = 0 Then Range("b20").EntireRow.Hidden = True
 
 
 End Sub
@@ -266,7 +290,7 @@ Sub Pros(PosStr)
     Range("AJ1").FormulaR1C1 = "Просрочка (срок - текущая дата)"
     Range("AJ2:AJ" & PosStr & "").Select
     With Selection
-        .FormulaR1C1 = "=ROUNDdown(RC[-1]-NOW(),1)"
+        .FormulaR1C1 = "=ROUNDdown(RC[-1]-now()-" & offset & "(),1)"
         .FillDown
         .NumberFormat = "General"
     End With
@@ -656,3 +680,4 @@ ActiveCell.offset(1, 0).Select
 Next
 
 End Sub
+
